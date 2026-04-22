@@ -1,8 +1,8 @@
 import streamlit as st
 
-from app.utilidades.carga_datos import cargar_dataset_penguins
-from app.utilidades.limpieza import limpiar_dataframe_penguins
-from app.utilidades.graficas import (
+from utilidades.carga_datos import cargar_dataset_penguins
+from utilidades.limpieza import limpiar_dataframe_penguins
+from utilidades.graficas import (
     plot_scatter_penguins,
     plot_boxplot_penguins,
     correlacion_heatmap,
