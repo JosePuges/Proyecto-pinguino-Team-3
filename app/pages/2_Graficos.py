@@ -8,9 +8,10 @@ from app.utilidades.graficas import (
     correlacion_heatmap,
     plot_conteo_penguins,
     plot_boxplot_adelie_island,
-    plot_multivariado_penguins
+    plot_multivariado_penguins,
 )
 
+st.set_page_config(page_title="Gráficos", layout="wide")
 st.title("Gráficos")
 
 @st.cache_data
@@ -18,6 +19,7 @@ def cargar_datos():
     df = cargar_dataset_penguins()
     df_limpio = limpiar_dataframe_penguins(df, mode="none")
     return df_limpio
+
 
 df_limpio = cargar_datos()
 

@@ -1,5 +1,6 @@
 from io import StringIO
 
+
 def inspeccionar_dataframe(df, mode="none", devolver_resultados=False):
     buffer = StringIO()
     df.info(buf=buffer)
