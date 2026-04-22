@@ -15,11 +15,17 @@ def inspeccionar_dataframe(df, mode="none", devolver_resultados=False):
 
     if mode == "streamlit":
         import streamlit as st
+
         st.subheader("Información general")
         st.write(f"Dimensiones: {resultados['dimensiones']}")
         st.text(resultados["info"])
-        st.dataframe(resultados["dtypes"].to_frame("tipo"))
-        st.dataframe(resultados["nulos"].to_frame("nulos"))
+
+        st.write("Tipos de datos:")
+        st.dataframe(resultados["dtypes"].astype(str).to_frame(name="tipo"))
+
+        st.write("Nulos por columna:")
+        st.dataframe(resultados["nulos"].astype(int).to_frame(name="nulos"))
+
         st.write(f"Duplicados: {resultados['duplicados']}")
 
     elif mode == "notebook":

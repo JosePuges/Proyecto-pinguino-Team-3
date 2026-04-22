@@ -29,8 +29,7 @@ Usa el menú lateral para navegar por:
 """)
 
 
-st.title("Proyecto de análisis de pingüinos")
-st.write("Aplicación de análisis exploratorio con Streamlit")
+
 
 @st.cache_data
 def cargar_datos():
