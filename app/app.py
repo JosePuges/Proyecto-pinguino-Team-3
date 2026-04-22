@@ -1,9 +1,9 @@
 import streamlit as st
 
-from carga_datos import cargar_dataset_penguins
-from limpieza import limpiar_dataframe_penguins
-from icon import inspeccionar_dataframe
-from graficas import (
+from utilidades.carga_datos import cargar_dataset_penguins
+from utilidades.limpieza import limpiar_dataframe_penguins
+from utilidades.icon import inspeccionar_dataframe
+from utilidades.graficas import (
     plot_scatter_penguins,
     plot_boxplot_penguins,
     correlacion_heatmap,
@@ -13,10 +13,21 @@ from graficas import (
     plot_dashboard_penguins
 )
 
-st.set_page_config(
-    page_title="Proyecto Pingüinos",
-    layout="wide"
-)
+
+
+st.set_page_config(page_title="Proyecto Pingüinos", layout="wide")
+
+st.title("Proyecto Pingüinos")
+st.write("Bienvenido a la app de análisis de pingüinos.")
+
+st.markdown("""
+Usa el menú lateral para navegar por:
+- Inspección del dataset
+- Análisis univariado
+- Análisis bivariado
+- Dashboard final
+""")
+
 
 st.title("Proyecto de análisis de pingüinos")
 st.write("Aplicación de análisis exploratorio con Streamlit")
