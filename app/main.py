@@ -1,8 +1,8 @@
 import streamlit as st
-from app.utils.data_loader import cargar_dataset_penguins
-from app.utils.cleaning import limpiar_dataframe_penguins
-from app.utils.inspection import inspeccionar_dataframe
-from app.utils.plots import plot_dashboard_penguins
+from app.utilidades.carga_datos import cargar_dataset_penguins
+from app.utilidades.limpieza import limpiar_dataframe_penguins
+from app.utilidades.icon import inspeccionar_dataframe
+from app.utilidades.graficas import plot_dashboard_penguins
 
 st.set_page_config(page_title="Proyecto Pingüinos", layout="wide")
 
