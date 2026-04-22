@@ -1,9 +1,9 @@
 import streamlit as st
 
-from data_loader import cargar_dataset_penguins
-from cleaning import limpiar_dataframe_penguins
-from inspection import inspeccionar_dataframe
-from plots import (
+from carga_datos import cargar_dataset_penguins
+from limpieza import limpiar_dataframe_penguins
+from icon import inspeccionar_dataframe
+from graficas import (
     plot_scatter_penguins,
     plot_boxplot_penguins,
     correlacion_heatmap,
