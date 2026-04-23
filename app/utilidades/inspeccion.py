@@ -14,8 +14,14 @@ def obtener_resumen_dataframe(df):
     }
 
 def mostrar_resumen_streamlit(resumen):
-    st.write(f"**Dimensiones:** {resumen['dimensiones']}")
-    st.text(resumen["info"])
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Filas", resumen["dimensiones"][0])
+    c2.metric("Columnas", resumen["dimensiones"][1])
+    c3.metric("Duplicados", resumen["duplicados"])
+
+    st.write("**Información estructural**")
+    st.code(resumen["info"])
+
     c1, c2 = st.columns(2)
     with c1:
         st.write("**Tipos de datos**")
@@ -23,4 +29,3 @@ def mostrar_resumen_streamlit(resumen):
     with c2:
         st.write("**Nulos por columna**")
         st.dataframe(resumen["nulos"].to_frame(name="nulos"), use_container_width=True)
-    st.write(f"**Duplicados:** {resumen['duplicados']}")

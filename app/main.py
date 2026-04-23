@@ -1,16 +1,17 @@
 import streamlit as st
 from utilidades.carga_datos import cargar_dataset_penguins
 from utilidades.limpieza import limpiar_dataframe_penguins
-from utilidades.ui import apply_global_styles, render_hero, render_metric_cards
+from utilidades.ui import apply_arctic_theme, render_hero, open_card, close_card, render_story
+from utilidades.content import load_markdown
 
 st.set_page_config(
-    page_title="Penguins Analytics",
+    page_title="Penguin Analytics Pro",
     page_icon="🐧",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-apply_global_styles()
+apply_arctic_theme()
 
 @st.cache_data
 def cargar_datos():
@@ -20,36 +21,26 @@ def cargar_datos():
 df = cargar_datos()
 
 render_hero(
-    title="Proyecto Palmer Penguins",
-    subtitle="Dashboard interactivo en Streamlit con navegación por páginas, filtros y visualizaciones listas para portfolio."
+    "Penguin Analytics Pro",
+    "Dashboard multipágina con una identidad visual inspirada en la Antártida: limpio, profesional y construido en distintos tonos de azul sobre fondo blanco."
 )
 
-st.sidebar.markdown("## Estado del proyecto")
-st.sidebar.success("Estructura multipágina activa")
-st.sidebar.caption("Navega por el menú lateral para abrir cada sección.")
+render_story(load_markdown("00_home.md"))
 
-render_metric_cards([
-    ("Pingüinos", len(df)),
-    ("Especies", df["species"].nunique()),
-    ("Islas", df["island"].nunique()),
-    ("Sexos", df["sex"].nunique()),
-])
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Pingüinos", len(df))
+c2.metric("Especies", df["species"].nunique())
+c3.metric("Islas", df["island"].nunique())
+c4.metric("Sexos", df["sex"].nunique())
 
-st.markdown("### Qué incluye")
-c1, c2 = st.columns(2)
-with c1:
-    st.markdown("""
-- Inspección del dataset  
-- Limpieza aplicada automáticamente  
-- Análisis de variables numéricas  
-- Análisis de variables categóricas  
+open_card()
+st.markdown("### Navegación")
+st.markdown("""
+Usa el menú lateral para ir a:
+- **Inspección**
+- **Variables numéricas**
+- **Variables categóricas**
+- **Relaciones**
+- **Dashboard final**
 """)
-with c2:
-    st.markdown("""
-- Scatterplots y correlaciones  
-- Conteos agrupados  
-- Boxplots filtrados  
-- Dashboard final  
-""")
-
-st.info("Abre las páginas desde la barra lateral: Inspección, Numéricas, Categóricas, Relaciones y Dashboard final.")
+close_card()

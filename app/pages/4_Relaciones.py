@@ -1,6 +1,5 @@
 from pathlib import Path
 import sys
-
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -15,28 +14,28 @@ from utilidades.graficas import (
     fig_boxplot_filtrado,
     fig_multivariado
 )
-from utilidades.ui import apply_global_styles, render_page_header
+from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story
+from utilidades.content import load_markdown
+from utilidades.nombres import COLUMNAS_BONITAS
 
-apply_global_styles()
+apply_arctic_theme()
 
 @st.cache_data
 def cargar_datos():
-    df = cargar_dataset_penguins()
-    return limpiar_dataframe_penguins(df)
+    return limpiar_dataframe_penguins(cargar_dataset_penguins())
 
 df = cargar_datos()
+render_page_header("Relaciones entre variables", "Explora relaciones bivariadas y multivariadas con filtros.")
+render_story(load_markdown("04_relaciones.md"))
 
-render_page_header("Relaciones entre variables", "Análisis bivariado y multivariado con filtros interactivos.")
+st.sidebar.markdown("## Filtros")
+species_opts = sorted(df["species"].dropna().unique().tolist())
+island_opts = sorted(df["island"].dropna().unique().tolist())
+sex_opts = sorted(df["sex"].dropna().unique().tolist())
 
-with st.sidebar:
-    st.markdown("## Filtros de página")
-    species_opts = sorted(df["species"].dropna().unique().tolist())
-    island_opts = sorted(df["island"].dropna().unique().tolist())
-    sex_opts = sorted(df["sex"].dropna().unique().tolist())
-
-    species_sel = st.multiselect("Especie", species_opts, default=species_opts)
-    island_sel = st.multiselect("Isla", island_opts, default=island_opts)
-    sex_sel = st.multiselect("Sexo", sex_opts, default=sex_opts)
+species_sel = st.sidebar.multiselect("Especie", species_opts, default=species_opts)
+island_sel = st.sidebar.multiselect("Isla", island_opts, default=island_opts)
+sex_sel = st.sidebar.multiselect("Sexo", sex_opts, default=sex_opts)
 
 df_filtrado = df[
     df["species"].isin(species_sel) &
@@ -54,14 +53,33 @@ tipo = st.radio(
     horizontal=True
 )
 
+opciones_columnas = ['bill_length_mm', 'bill_depth_mm', 'body_mass_g', 'flipper_length_mm']
+
+open_card()
+
 if tipo == "Scatterplot":
     c1, c2 = st.columns(2)
-    opciones = ['bill_length_mm', 'bill_depth_mm', 'body_mass_g', 'flipper_length_mm']
     with c1:
-        x_var = st.selectbox("Eje X", opciones, index=0, key="rel_x")
+        x_var = st.selectbox(
+            "Eje X",
+            opciones_columnas,
+            index=0,
+            format_func=lambda x: COLUMNAS_BONITAS.get(x, x),
+            key="scatter_x"
+        )
     with c2:
-        y_var = st.selectbox("Eje Y", opciones, index=1, key="rel_y")
-    st.pyplot(fig_scatter(df_filtrado, x=x_var, y=y_var, hue="species"), use_container_width=True)
+        y_var = st.selectbox(
+            "Eje Y",
+            opciones_columnas,
+            index=1,
+            format_func=lambda x: COLUMNAS_BONITAS.get(x, x),
+            key="scatter_y"
+        )
+
+    st.pyplot(
+        fig_scatter(df_filtrado, x=x_var, y=y_var, hue="species"),
+        use_container_width=True
+    )
 
 elif tipo == "Heatmap":
     st.dataframe(df_filtrado.select_dtypes(include="number").corr(), use_container_width=True)
@@ -73,20 +91,46 @@ elif tipo == "Conteo agrupado":
 elif tipo == "Boxplot filtrado":
     c1, c2 = st.columns(2)
     with c1:
-        especie = st.selectbox("Especie", sorted(df_filtrado["species"].unique().tolist()), key="rel_especie")
+        especie = st.selectbox(
+            "Especie",
+            sorted(df_filtrado["species"].unique().tolist()),
+            key="box_especie"
+        )
     with c2:
-        variable = st.selectbox("Variable", ['bill_length_mm', 'bill_depth_mm', 'body_mass_g', 'flipper_length_mm'], key="rel_var")
-    st.pyplot(fig_boxplot_filtrado(df_filtrado, especie=especie, variable=variable, grupo="island"), use_container_width=True)
+        variable = st.selectbox(
+            "Variable",
+            opciones_columnas,
+            format_func=lambda x: COLUMNAS_BONITAS.get(x, x),
+            key="box_variable"
+        )
+
+    st.pyplot(
+        fig_boxplot_filtrado(df_filtrado, especie=especie, variable=variable, grupo="island"),
+        use_container_width=True
+    )
 
 elif tipo == "Multivariado":
-    x_var = st.selectbox("Variable eje X", ['body_mass_g', 'bill_length_mm', 'bill_depth_mm', 'flipper_length_mm'], index=0, key="rel_multi_x")
+    x_var = st.selectbox(
+        "Variable eje X",
+        opciones_columnas,
+        index=2,
+        format_func=lambda x: COLUMNAS_BONITAS.get(x, x),
+        key="multi_x"
+    )
+
     st.pyplot(
         fig_multivariado(
             df_filtrado,
             x_var=x_var,
             y_vars=['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm'],
-            y_labels=['Longitud del pico [mm]', 'Altura del pico [mm]', 'Longitud de la aleta [mm]'],
+            y_labels=[
+                'Longitud del pico [mm]',
+                'Altura del pico [mm]',
+                'Longitud de la aleta [mm]'
+            ],
             hue='species'
         ),
         use_container_width=True
     )
+
+close_card()

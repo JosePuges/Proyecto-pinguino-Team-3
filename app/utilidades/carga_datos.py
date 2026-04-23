@@ -5,4 +5,6 @@ import matplotlib.pyplot as plt
 def cargar_dataset_penguins():
     sns.set_theme(style="whitegrid")
     plt.rcParams["figure.figsize"] = (10, 5)
+    plt.rcParams["axes.facecolor"] = "#ffffff"
+    plt.rcParams["figure.facecolor"] = "#ffffff"
     return load_penguins()
