@@ -21,7 +21,7 @@ def cargar_datos():
 df = cargar_datos()
 
 render_page_header("Variables categóricas", "Frecuencias, proporciones y distribución visual.")
-render_story(load_markdown("03_categoricas.md"))
+
 variable = st.selectbox("Selecciona una variable categórica", df.select_dtypes(include="object").columns.tolist(), format_func=lambda x: COLUMNAS_BONITAS.get(x, x))
 
 frecuencias = df[variable].value_counts()
@@ -43,3 +43,5 @@ open_card()
 st.write("#### Distribución")
 st.pyplot(fig_barras_categorica(df, variable), use_container_width=True)
 close_card()
+
+render_story(load_markdown("03_categoricas.md"))

@@ -26,7 +26,7 @@ def cargar_datos():
 
 df = cargar_datos()
 render_page_header("Relaciones entre variables", "Explora relaciones bivariadas y multivariadas con filtros.")
-render_story(load_markdown("04_relaciones.md"))
+
 
 st.sidebar.markdown("## Filtros")
 species_opts = sorted(df["species"].dropna().unique().tolist())
@@ -134,3 +134,5 @@ elif tipo == "Multivariado":
     )
 
 close_card()
+
+render_story(load_markdown("04_relaciones.md"))

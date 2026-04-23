@@ -20,8 +20,10 @@ def cargar_datos():
 df = cargar_datos()
 
 render_page_header("Dashboard final", "Resumen ejecutivo con las visualizaciones principales del proyecto.")
-render_story(load_markdown("05_dashboard.md"))
+
 open_card()
 st.pyplot(fig_dashboard_resumen(df), use_container_width=True)
 st.caption("Diseño inspirado en una paleta antártica: blanco, azules profundos, azules oceánicos y tonos hielo.")
 close_card()
+
+render_story(load_markdown("05_dashboard.md"))

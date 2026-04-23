@@ -21,7 +21,7 @@ def cargar_datos():
 df = cargar_datos()
 
 render_page_header("Variables numéricas", "Estadísticos, asimetría, histogramas y boxplots.")
-render_story(load_markdown("02_numericas.md"))
+
 
 variables = ['bill_length_mm', 'bill_depth_mm', 'body_mass_g', 'flipper_length_mm']
 variable = st.selectbox("Selecciona una variable", variables, format_func=lambda x: COLUMNAS_BONITAS.get(x, x))
@@ -43,3 +43,5 @@ open_card()
 st.write("#### Boxplot")
 st.pyplot(fig_boxplot(df, variable), use_container_width=True)
 close_card()
+
+render_story(load_markdown("02_numericas.md"))
