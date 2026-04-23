@@ -4,6 +4,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import plotly.express as px
 import streamlit as st
 from utilidades.carga_datos import cargar_dataset_penguins
 from utilidades.limpieza import limpiar_dataframe_penguins
@@ -76,7 +77,7 @@ if tipo == "Scatterplot":
             key="scatter_y"
         )
 
-    st.pyplot(
+    st.plotly_chart(
         fig_scatter(df_filtrado, x=x_var, y=y_var, hue="species"),
         use_container_width=True
     )

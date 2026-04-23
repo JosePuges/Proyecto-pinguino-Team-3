@@ -46,11 +46,34 @@ def fig_barras_categorica(df, variable):
     return _finalize(fig)
 
 def fig_scatter(df, x='bill_length_mm', y='bill_depth_mm', hue='species'):
-    fig, ax = plt.subplots(figsize=(8, 5))
-    palette = _species_palette(df)
-    sns.scatterplot(data=df, x=x, y=y, hue=hue, ax=ax, palette=palette, s=65, alpha=0.9)
-    ax.set_title(f"Relación entre {x} y {y}")
-    return _finalize(fig)
+    import plotly.express as px
+
+    fig = px.scatter(
+        df,
+        x=x,
+        y=y,
+        color=hue if hue in df.columns else None,
+        color_discrete_map=PALETTE_SPECIES,
+        hover_data={
+            'species': True if 'species' in df.columns else False,
+            'island': True if 'island' in df.columns else False,
+            'sex': True if 'sex' in df.columns else False,
+            'bill_length_mm': ':.1f' if 'bill_length_mm' in df.columns else False,
+            'bill_depth_mm': ':.1f' if 'bill_depth_mm' in df.columns else False,
+            'flipper_length_mm': ':.1f' if 'flipper_length_mm' in df.columns else False,
+            'body_mass_g': ':.0f' if 'body_mass_g' in df.columns else False,
+        },
+        title=f"Relación entre {x} y {y}",
+    )
+
+    fig.update_traces(marker=dict(size=9, opacity=0.85))
+    fig.update_layout(
+        template="plotly_white",
+        legend_title_text=hue,
+        margin=dict(l=20, r=20, t=60, b=20),
+    )
+
+    return fig
 
 def fig_heatmap_correlacion(df):
     corr = df.select_dtypes(include='number').drop(columns=['year'], errors='ignore').corr()

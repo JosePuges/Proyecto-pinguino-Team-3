@@ -20,7 +20,7 @@ def cargar_datos():
 df = cargar_datos()
 
 render_page_header("Inspección del dataset", "Estructura, esquema y estado del dataset limpio.")
-render_story(load_markdown("01_inspeccion.md"))
+
 
 open_card()
 st.dataframe(df.head(12), use_container_width=True)
@@ -29,3 +29,5 @@ close_card()
 open_card()
 mostrar_resumen_streamlit(obtener_resumen_dataframe(df))
 close_card()
+
+render_story(load_markdown("01_inspeccion.md"))
