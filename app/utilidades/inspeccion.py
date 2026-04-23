@@ -1,40 +1,26 @@
 from io import StringIO
+import streamlit as st
 
-
-def inspeccionar_dataframe(df, mode="none", devolver_resultados=False):
+def obtener_resumen_dataframe(df):
     buffer = StringIO()
     df.info(buf=buffer)
     info_str = buffer.getvalue()
-
-    resultados = {
+    return {
         "dimensiones": df.shape,
         "info": info_str,
-        "dtypes": df.dtypes,
-        "nulos": df.isna().sum(),
-        "duplicados": df.duplicated().sum(),
+        "dtypes": df.dtypes.astype(str),
+        "nulos": df.isna().sum().astype(int),
+        "duplicados": int(df.duplicated().sum()),
     }
 
-    if mode == "streamlit":
-        import streamlit as st
-
-        st.subheader("Información general")
-        st.write(f"Dimensiones: {resultados['dimensiones']}")
-        st.text(resultados["info"])
-
-        st.write("Tipos de datos:")
-        st.dataframe(resultados["dtypes"].astype(str).to_frame(name="tipo"))
-
-        st.write("Nulos por columna:")
-        st.dataframe(resultados["nulos"].astype(int).to_frame(name="nulos"))
-
-        st.write(f"Duplicados: {resultados['duplicados']}")
-
-    elif mode == "notebook":
-        print("Dimensiones:", resultados["dimensiones"])
-        print(resultados["info"])
-        print(resultados["dtypes"])
-        print(resultados["nulos"])
-        print("Duplicados:", resultados["duplicados"])
-
-    if devolver_resultados:
-        return resultados
+def mostrar_resumen_streamlit(resumen):
+    st.write(f"**Dimensiones:** {resumen['dimensiones']}")
+    st.text(resumen["info"])
+    c1, c2 = st.columns(2)
+    with c1:
+        st.write("**Tipos de datos**")
+        st.dataframe(resumen["dtypes"].to_frame(name="tipo"), use_container_width=True)
+    with c2:
+        st.write("**Nulos por columna**")
+        st.dataframe(resumen["nulos"].to_frame(name="nulos"), use_container_width=True)
+    st.write(f"**Duplicados:** {resumen['duplicados']}")

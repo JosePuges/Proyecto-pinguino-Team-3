@@ -1,4 +1,4 @@
-def limpiar_dataframe_penguins(df, mode="none"):
+def limpiar_dataframe_penguins(df):
     df_limpio = df.copy()
     df_limpio = df_limpio.drop_duplicates()
     df_limpio = df_limpio.dropna(
