@@ -15,7 +15,7 @@ from utilidades.graficas import (
     fig_boxplot_filtrado,
     fig_multivariado
 )
-from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story
+from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story, render_sidebar_branding
 from utilidades.content import load_markdown
 from utilidades.nombres import COLUMNAS_BONITAS
 
@@ -27,6 +27,7 @@ def cargar_datos():
 
 df = cargar_datos()
 render_page_header("Relaciones entre variables", "Explora relaciones bivariadas y multivariadas con filtros.")
+render_sidebar_branding("4_Relaciones")
 
 
 st.sidebar.markdown("## Filtros")

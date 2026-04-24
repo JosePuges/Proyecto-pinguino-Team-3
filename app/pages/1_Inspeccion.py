@@ -8,7 +8,7 @@ import streamlit as st
 from utilidades.carga_datos import cargar_dataset_penguins
 from utilidades.limpieza import limpiar_dataframe_penguins
 from utilidades.inspeccion import obtener_resumen_dataframe, mostrar_resumen_streamlit
-from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story
+from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story, render_sidebar_branding
 from utilidades.content import load_markdown
 
 apply_arctic_theme()
@@ -31,3 +31,4 @@ mostrar_resumen_streamlit(obtener_resumen_dataframe(df))
 close_card()
 
 render_story(load_markdown("01_inspeccion.md"))
+render_sidebar_branding("1_Inspeccion")
