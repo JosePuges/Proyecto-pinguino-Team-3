@@ -8,7 +8,7 @@ import streamlit as st
 from utilidades.carga_datos import cargar_dataset_penguins
 from utilidades.limpieza import limpiar_dataframe_penguins
 from utilidades.graficas import fig_histograma_kde, fig_boxplot
-from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story
+from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story,render_sidebar_branding
 from utilidades.content import load_markdown
 from utilidades.nombres import COLUMNAS_BONITAS
 
@@ -45,3 +45,5 @@ st.pyplot(fig_boxplot(df, variable), use_container_width=True)
 close_card()
 
 render_story(load_markdown("02_numericas.md"))
+
+render_sidebar_branding("2_Variables_numericas")

@@ -1,3 +1,4 @@
+from pathlib import Path
 import streamlit as st
 
 ARCTIC_COLORS = {
@@ -226,3 +227,40 @@ def close_card():
 def render_story(markdown_text):
     if markdown_text and markdown_text.strip():
         st.markdown(markdown_text)
+
+
+
+def render_sidebar_branding(page_name="Inicio"):
+    mensajes = {
+        "Inicio": "Bienvenido al hielo de datos 🧊",
+        "1_Inspeccion": "Vamos a explorar nuestro dataset 🔎",
+        "2_Variables_numericas": "Hora de mirar gráficos bonitos 📊",
+        "3_Variables_categoricas": "Vamos a explorar patrones entre especies 🔎",
+        "4_Relaciones": "Explorando relaciones entre variables 📈",
+        "5_Dashboard_final": "Resumen ejecutivo del proyecto 📊",
+    }
+
+    mensaje = mensajes.get(page_name, "Explorando el mundo pingüino 🐧")
+
+    # 📁 ruta absoluta (esto evita TODOS los errores)
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    ruta_imagen = BASE_DIR / "assets" / "pinguinos.png"
+
+    st.sidebar.image(str(ruta_imagen), use_container_width=True)
+
+    st.sidebar.markdown(f"""
+    <div style="
+        text-align:center;
+        background:#F5FAFF;
+        border:1px solid #DFF3FA;
+        border-radius:18px;
+        padding:14px;
+        margin-bottom:16px;
+        box-shadow:0 6px 18px rgba(29,111,163,0.08);
+    ">
+        <h3 style="margin:0;color:#0B3C5D;">Penguin Analytics</h3>
+        <p style="color:#6B7C8F;font-size:0.9rem;margin-top:8px;">
+            {mensaje}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)

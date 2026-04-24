@@ -8,7 +8,7 @@ import streamlit as st
 from utilidades.carga_datos import cargar_dataset_penguins
 from utilidades.limpieza import limpiar_dataframe_penguins
 from utilidades.graficas import fig_dashboard_resumen
-from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story
+from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story, render_sidebar_branding
 from utilidades.content import load_markdown
 
 apply_arctic_theme()
@@ -18,6 +18,7 @@ def cargar_datos():
     return limpiar_dataframe_penguins(cargar_dataset_penguins())
 
 df = cargar_datos()
+render_sidebar_branding("5_Dashboard_final")
 
 render_page_header("Dashboard final", "Resumen ejecutivo con las visualizaciones principales del proyecto.")
 
