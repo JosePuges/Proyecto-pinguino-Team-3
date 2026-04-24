@@ -83,7 +83,7 @@ if tipo == "Scatterplot":
     )
 
 elif tipo == "Heatmap":
-    st.dataframe(df_filtrado.select_dtypes(include="number").corr(), use_container_width=True)
+    st.dataframe(df_filtrado.select_dtypes(include="number").drop(columns=['year'], errors='ignore').corr(), use_container_width=True)
     st.pyplot(fig_heatmap_correlacion(df_filtrado), use_container_width=True)
 
 elif tipo == "Conteo agrupado":

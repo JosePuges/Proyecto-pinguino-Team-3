@@ -16,7 +16,9 @@ def apply_arctic_theme():
     html, body, [class*="css"] {{
         font-family: "Segoe UI", "Inter", sans-serif;
         color: {ARCTIC_COLORS["navy"]};
+
     }}
+    
 
     .stApp {{
         background-color: {ARCTIC_COLORS["white"]};
@@ -142,6 +144,8 @@ def apply_arctic_theme():
         box-shadow: 0 6px 18px rgba(29, 111, 163, 0.04);
     }}
 
+    
+
     div[data-testid="stMetricLabel"] {{
         color: {ARCTIC_COLORS["slate"]};
         font-weight: 600;
@@ -221,6 +225,4 @@ def close_card():
 
 def render_story(markdown_text):
     if markdown_text and markdown_text.strip():
-        st.markdown('<div class="story-block">', unsafe_allow_html=True)
         st.markdown(markdown_text)
-        st.markdown('</div>', unsafe_allow_html=True)

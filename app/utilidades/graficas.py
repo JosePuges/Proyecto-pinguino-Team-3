@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+from utilidades.nombres import nombre_bonito, COLUMNAS_BONITAS
 
 PALETTE_SPECIES = {
     "Adelie": "#0B3C5D",
@@ -23,24 +24,24 @@ def _species_palette(df):
 def fig_histograma_kde(df, variable):
     fig, ax = plt.subplots(figsize=(7, 4))
     sns.histplot(df[variable].dropna(), kde=True, ax=ax, color="#1D6FA3")
-    ax.set_title(f"Distribución de {variable}")
-    ax.set_xlabel(variable)
+    ax.set_title(f"Distribución de {nombre_bonito(variable)}")
+    ax.set_xlabel(nombre_bonito(variable))
     ax.set_ylabel("Frecuencia")
     return _finalize(fig)
 
 def fig_boxplot(df, variable):
     fig, ax = plt.subplots(figsize=(7, 3))
     sns.boxplot(x=df[variable], ax=ax, color="#4FB3D9")
-    ax.set_title(f"Boxplot de {variable}")
-    ax.set_xlabel(variable)
+    ax.set_title(f"Boxplot de {nombre_bonito(variable)}")
+    ax.set_xlabel(nombre_bonito(variable))
     return _finalize(fig)
 
 def fig_barras_categorica(df, variable):
     tabla = df[variable].value_counts()
     fig, ax = plt.subplots(figsize=(7, 4))
     tabla.plot(kind='bar', ax=ax, color=BAR_COLORS[:len(tabla)])
-    ax.set_title(f"Distribución de {variable}")
-    ax.set_xlabel(variable)
+    ax.set_title(f"Distribución de {nombre_bonito(variable)}")
+    ax.set_xlabel(nombre_bonito(variable))
     ax.set_ylabel("Frecuencia")
     ax.tick_params(axis='x', rotation=0)
     return _finalize(fig)
@@ -54,6 +55,7 @@ def fig_scatter(df, x='bill_length_mm', y='bill_depth_mm', hue='species'):
         y=y,
         color=hue if hue in df.columns else None,
         color_discrete_map=PALETTE_SPECIES,
+        labels=COLUMNAS_BONITAS,
         hover_data={
             'species': True if 'species' in df.columns else False,
             'island': True if 'island' in df.columns else False,
@@ -63,7 +65,7 @@ def fig_scatter(df, x='bill_length_mm', y='bill_depth_mm', hue='species'):
             'flipper_length_mm': ':.1f' if 'flipper_length_mm' in df.columns else False,
             'body_mass_g': ':.0f' if 'body_mass_g' in df.columns else False,
         },
-        title=f"Relación entre {x} y {y}",
+        title=f"Relación entre {nombre_bonito(x)} y {nombre_bonito(y)}",
     )
 
     fig.update_traces(marker=dict(size=9, opacity=0.85))
@@ -77,6 +79,10 @@ def fig_scatter(df, x='bill_length_mm', y='bill_depth_mm', hue='species'):
 
 def fig_heatmap_correlacion(df):
     corr = df.select_dtypes(include='number').drop(columns=['year'], errors='ignore').corr()
+    corr = corr.rename(
+        index=lambda x: nombre_bonito(x),
+        columns=lambda x: nombre_bonito(x)
+    )
     fig, ax = plt.subplots(figsize=(7, 5))
     sns.heatmap(corr, cmap='Blues', annot=True, fmt=".2f", ax=ax, linewidths=0.5, linecolor="#FFFFFF")
     ax.set_title("Matriz de correlación")
@@ -111,10 +117,10 @@ def fig_boxplot_filtrado(df, especie='Adelie', variable='bill_length_mm', grupo=
         median.set_color('#0B3C5D')
         median.set_linewidth(1.5)
 
-    ax.set_title(f'{variable} de {especie} por {grupo}')
+    ax.set_title(f'{nombre_bonito(variable)} de {especie} por {nombre_bonito(grupo)}')
     plt.suptitle('')
-    ax.set_xlabel(grupo)
-    ax.set_ylabel(variable)
+    ax.set_xlabel(nombre_bonito(grupo))
+    ax.set_ylabel(nombre_bonito(variable))
     return _finalize(fig)
 
 def fig_multivariado(df, x_var='body_mass_g', y_vars=None, y_labels=None, hue='species'):
@@ -130,8 +136,8 @@ def fig_multivariado(df, x_var='body_mass_g', y_vars=None, y_labels=None, hue='s
     palette = _species_palette(df)
     for i, (y, label) in enumerate(zip(y_vars, y_labels)):
         sns.scatterplot(data=df, x=x_var, y=y, hue=hue, ax=axes[i], palette=palette, s=55, alpha=0.85)
-        axes[i].set_xlabel(x_var)
-        axes[i].set_ylabel(label)
+        axes[i].set_xlabel(nombre_bonito(x_var))
+        axes[i].set_ylabel(nombre_bonito(label))
         if i < len(y_vars) - 1 and axes[i].get_legend() is not None:
             axes[i].get_legend().remove()
 

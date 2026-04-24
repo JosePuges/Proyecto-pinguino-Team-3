@@ -7,3 +7,7 @@ COLUMNAS_BONITAS = {
     "island": "Isla",  
     "sex": "Sexo"
 }
+
+
+def nombre_bonito(columna):
+    return COLUMNAS_BONITAS.get(columna, columna)
