@@ -11,6 +11,7 @@ from utilidades.graficas import fig_barras_categorica
 from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story, render_sidebar_branding
 from utilidades.content import load_markdown
 from utilidades.nombres import COLUMNAS_BONITAS
+from utilidades.export import  descargar_grafico_matplotlib
 
 apply_arctic_theme()
 
@@ -41,7 +42,25 @@ with c2:
 
 open_card()
 st.write("#### Distribución")
-st.pyplot(fig_barras_categorica(df, variable), use_container_width=True)
+fig = fig_barras_categorica(df, variable)
+st.pyplot(fig, use_container_width=True)
+
+close_card()
+
+open_card()
+
+st.subheader("📥 Exportar resultados")
+
+df_export_categorica = frecuencias.to_frame("frecuencia")
+df_export_categorica["proporcion"] = proporciones
+
+
+
+descargar_grafico_matplotlib(
+    fig,
+    f"grafico_{variable}.png"
+)
+
 close_card()
 
 render_story(load_markdown("03_categoricas.md"))
