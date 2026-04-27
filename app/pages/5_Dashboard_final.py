@@ -30,7 +30,7 @@ open_card()
 fig = fig_dashboard_resumen(df)
 
 st.pyplot(fig, use_container_width=True)
-st.caption("Diseño inspirado en una paleta antártica: blanco, azules profundos, azules oceánicos y tonos hielo.")
+
 
 close_card()
 

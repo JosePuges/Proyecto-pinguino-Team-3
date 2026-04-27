@@ -4,6 +4,7 @@ from utilidades.limpieza import limpiar_dataframe_penguins
 from utilidades.ui import apply_arctic_theme, render_hero, open_card, close_card, render_page_header, render_story
 from utilidades.content import load_markdown
 from utilidades.ui import apply_arctic_theme, render_sidebar_branding
+from utilidades.chatbot import render_chatbot_pinguino
 
 st.set_page_config(
     page_title="Penguin Analytics Pro",
@@ -45,53 +46,6 @@ c4.metric("Sexos", df["sex"].nunique())
 
 st.divider()
 
-st.subheader("🐧 Pregúntale al pingüino analista")
-
-if "mensajes_pinguino" not in st.session_state:
-    st.session_state.mensajes_pinguino = [
-        {
-            "role": "assistant",
-            "content": "¡Hola! Soy PinguBot 🐧 Pregúntame sobre especies, islas, sexo o tamaño del dataset."
-        }
-    ]
-
-for mensaje in st.session_state.mensajes_pinguino:
-    avatar = "🐧" if mensaje["role"] == "assistant" else "🧑"
-    with st.chat_message(mensaje["role"], avatar=avatar):
-        st.write(mensaje["content"])
-
-pregunta = st.chat_input("Pregunta algo sobre los pingüinos...")
-
-if pregunta:
-    st.session_state.mensajes_pinguino.append(
-        {"role": "user", "content": pregunta}
-    )
-
-    pregunta_lower = pregunta.lower()
-
-    if "cuántos" in pregunta_lower or "cuantos" in pregunta_lower:
-        respuesta = f"Tenemos {len(df)} pingüinos en el dataset 🐧"
-
-    elif "especies" in pregunta_lower:
-        especies = ", ".join(df["species"].dropna().unique())
-        respuesta = f"Las especies del dataset son: {especies}."
-
-    elif "islas" in pregunta_lower or "isla" in pregunta_lower:
-        islas = ", ".join(df["island"].dropna().unique())
-        respuesta = f"Los pingüinos aparecen en estas islas: {islas}."
-
-    elif "sexo" in pregunta_lower or "sexos" in pregunta_lower:
-        sexos = ", ".join(df["sex"].dropna().unique())
-        respuesta = f"En la columna sexo aparecen estos valores: {sexos}."
-
-    elif "media" in pregunta_lower or "promedio" in pregunta_lower:
-        respuesta = "Puedo calcular medias, pero dime de qué columna: peso, aleta, pico, etc. 🧊"
-
-    else:
-        respuesta = "Mmm... no estoy seguro, pero puedes preguntarme por especies, islas, sexos o número de pingüinos 🐧"
-
-    st.session_state.mensajes_pinguino.append(
-        {"role": "assistant", "content": respuesta}
-    )
-
-    st.rerun()
+open_card()
+render_chatbot_pinguino(df)
+close_card()
