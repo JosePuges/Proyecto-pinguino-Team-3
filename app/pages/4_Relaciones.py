@@ -18,6 +18,8 @@ from utilidades.graficas import (
 from utilidades.ui import apply_arctic_theme, render_page_header, open_card, close_card, render_story, render_sidebar_branding
 from utilidades.content import load_markdown
 from utilidades.nombres import COLUMNAS_BONITAS
+from utilidades.export import descargar_grafico_matplotlib, descargar_grafico_plotly
+
 
 apply_arctic_theme()
 
@@ -59,6 +61,8 @@ opciones_columnas = ['bill_length_mm', 'bill_depth_mm', 'body_mass_g', 'flipper_
 
 open_card()
 
+fig = None
+
 if tipo == "Scatterplot":
     c1, c2 = st.columns(2)
     with c1:
@@ -78,17 +82,27 @@ if tipo == "Scatterplot":
             key="scatter_y"
         )
 
-    st.plotly_chart(
-        fig_scatter(df_filtrado, x=x_var, y=y_var, hue="species"),
-        use_container_width=True
-    )
+    fig = fig_scatter(df_filtrado, x=x_var, y=y_var, hue="species")
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    
 
 elif tipo == "Heatmap":
-    st.dataframe(df_filtrado.select_dtypes(include="number").drop(columns=['year'], errors='ignore').corr(), use_container_width=True)
-    st.pyplot(fig_heatmap_correlacion(df_filtrado), use_container_width=True)
+    fig = fig_heatmap_correlacion(df_filtrado)
+    st.pyplot(fig, use_container_width=True)
+
+    with st.expander("Ver matriz de correlación"):
+        st.dataframe(
+            df_filtrado.select_dtypes(include="number")
+            .drop(columns=["year"], errors="ignore")
+            .corr(),
+            use_container_width=True
+        )
 
 elif tipo == "Conteo agrupado":
-    st.pyplot(fig_conteo_agrupado(df_filtrado), use_container_width=True)
+    fig = fig_conteo_agrupado(df_filtrado)
+    st.pyplot(fig, use_container_width=True)
 
 elif tipo == "Boxplot filtrado":
     c1, c2 = st.columns(2)
@@ -106,10 +120,9 @@ elif tipo == "Boxplot filtrado":
             key="box_variable"
         )
 
-    st.pyplot(
-        fig_boxplot_filtrado(df_filtrado, especie=especie, variable=variable, grupo="island"),
-        use_container_width=True
-    )
+    fig = fig_boxplot_filtrado(df_filtrado, especie=especie, variable=variable, grupo="island")
+    st.pyplot(fig, use_container_width=True)
+    
 
 elif tipo == "Multivariado":
     x_var = st.selectbox(
@@ -120,8 +133,7 @@ elif tipo == "Multivariado":
         key="multi_x"
     )
 
-    st.pyplot(
-        fig_multivariado(
+    fig = fig_multivariado(
             df_filtrado,
             x_var=x_var,
             y_vars=['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm'],
@@ -131,9 +143,24 @@ elif tipo == "Multivariado":
                 'Longitud de la aleta [mm]'
             ],
             hue='species'
-        ),
-        use_container_width=True
-    )
+        )
+        
+    st.pyplot(fig, use_container_width=True)
+
+close_card()
+
+open_card()
+
+st.subheader("📥 Exportar datos y gráfico")
+
+
+
+# Exportar gráfico según tipo
+if fig is not None:
+    if tipo == "Scatterplot":
+        descargar_grafico_plotly(fig, "scatter_penguins.html")
+    else:
+        descargar_grafico_matplotlib(fig, f"{tipo.lower()}.png")
 
 close_card()
 
